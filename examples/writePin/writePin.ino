@@ -26,15 +26,14 @@ void loop() {
 
 void routeOSC(OSCMessage &msg) {
   if (msg.match("/thing/write")) {
-    int pin = msg.getInt(0);
-    int val = msg.getInt(1);
+    int pin = getIntArg(msg, 0);
+    int val = getIntArg(msg, 1);
 
     if (val == 0 || val == 1) {
       pinMode(pin, OUTPUT);
       digitalWrite(pin, val);
     } else {
-      ledcAttachPin(pin, 0); // PWM on channel 0
-      ledcWrite(0, val);
+      // analogWrite logic
     }
 
     sendSampleOSC("/thing/wrote", val);

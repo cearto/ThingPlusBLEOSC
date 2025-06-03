@@ -9,14 +9,13 @@
  * @license MIT
  */
 
-#include "config.h" // update BLE definitions 
-#include <Arduino.h>  // ensures ledc* functions are visible
+#include "config.h"
 #include <BLEHandler.h>
 #include <OSCHandler.h>
 
 void setup() {
   Serial.begin(115200);
-  setupBLE(); // Initialize BLE services
+  setupBLE();
 }
 
 void loop() {
@@ -24,8 +23,8 @@ void loop() {
 }
 
 void routeOSC(OSCMessage &msg) {
-  if (msg.match("/thing/read")) {
-    String pinLabel = msg.getString(0);
+  if (msg.match("/thing/read*")) {
+    String pinLabel = getStringArg(msg, 1);  // Updated to use helper
     int value;
 
     if (pinLabel.startsWith("A")) {
