@@ -10,6 +10,7 @@
  */
 
 #include "config.h" // update BLE definitions 
+#include <Arduino.h>  // ensures ledc* functions are visible
 #include <BLEHandler.h>
 #include <OSCHandler.h>
 

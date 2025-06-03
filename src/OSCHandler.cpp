@@ -35,3 +35,36 @@ void sendOSC(const char *address, const int *args, int numArgs) {
     }
     Serial.println();
 }
+
+String getStringArg(OSCMessage &msg, int index) {
+    char buffer[64];
+    msg.getAddress(buffer, 0, sizeof(buffer));
+
+    char *token = strtok(buffer, " ");
+    for (int i = 0; i < index && token != nullptr; i++) {
+        token = strtok(nullptr, " ");
+    }
+    return (token != nullptr) ? String(token) : "";
+}
+
+int getIntArg(OSCMessage &msg, int index) {
+    char buffer[64];
+    msg.getAddress(buffer, 0, sizeof(buffer));
+
+    char *token = strtok(buffer, " ");
+    for (int i = 0; i < index && token != nullptr; i++) {
+        token = strtok(nullptr, " ");
+    }
+    return (token != nullptr) ? atoi(token) : 0;
+}
+
+float getFloatArg(OSCMessage &msg, int index) {
+    char buffer[64];
+    msg.getAddress(buffer, 0, sizeof(buffer));
+
+    char *token = strtok(buffer, " ");
+    for (int i = 0; i < index && token != nullptr; i++) {
+        token = strtok(nullptr, " ");
+    }
+    return (token != nullptr) ? atof(token) : 0.0;
+}

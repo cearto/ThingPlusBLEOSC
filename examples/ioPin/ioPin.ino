@@ -1,24 +1,5 @@
-/**
- * @file ioPin.ino
- * @brief Full OSC I/O Example for ESP32 ThingPlus using BLE
- * 
- * Supports both analog/digital read and write via OSC messages over BLE.
- * 
- * Accepted messages:
- *   - "/thing/read A0" or "/thing/read 9" → reads value from pin
- *   - "/thing/write 25 255" or "/thing/write 9 0" → writes value to pin
- * 
- * Responds with:
- *   - "/thing/value <val>" on read
- *   - "/thing/wrote <val>" on write
- * 
- * PWM writes automatically attach the pin to a LEDC channel.
- * 
- * @author Cesar Torres
- * @license MIT
- */
-
-#include "config.h" // update BLE definitions 
+#include "config.h"
+#include "driver/ledc.h" // if using the LED library to do analogWrite
 #include <BLEHandler.h>
 #include <OSCHandler.h>
 
@@ -29,17 +10,16 @@ const int pwmResolution = 8;
 void setup() {
   Serial.begin(115200);
   ledcSetup(pwmChannel, pwmFreq, pwmResolution); // Setup PWM channel
-  setupBLE(); // Initialize BLE OSC interface
+  setupBLE();
 }
 
 void loop() {
   delay(100);
 }
 
-// Route incoming OSC messages to read/write handlers
 void routeOSC(OSCMessage &msg) {
-  if (msg.match("/thing/read")) {
-    String pinLabel = msg.getString(0);
+  if (msg.match("/thing/read*")) {
+    String pinLabel = getStringArg(msg, 1); // First argument after address
     int value;
 
     if (pinLabel.startsWith("A")) {
@@ -52,12 +32,13 @@ void routeOSC(OSCMessage &msg) {
 
     sendSampleOSC("/thing/value", value);
 
-  } else if (msg.match("/thing/write")) {
-    int pin = msg.getInt(0);
-    int val = msg.getInt(1);
+  } else if (msg.match("/thing/write*")) {
+    int pin = getIntArg(msg, 1);
+    int val = getIntArg(msg, 2);
+
+    pinMode(pin, OUTPUT);
 
     if (val == 0 || val == 1) {
-      pinMode(pin, OUTPUT);
       digitalWrite(pin, val);
     } else {
       ledcAttachPin(pin, pwmChannel);
