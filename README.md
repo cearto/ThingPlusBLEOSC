@@ -1,6 +1,6 @@
 # ThingPlusBLEOSC
 
-**ThingPlusBLEOSC** is an Arduino-compatible library that enables [SparkFun Thing Plus (ESP32)](https://www.sparkfun.com/products/15663) devices to send and receive [Open Sound Control (OSC)](https://opensoundcontrol.stanford.edu/) messages via Bluetooth Low Energy (BLE). It is designed for creative coding, interactive installations, and sensor-actuator projects that benefit from wireless communication with minimal setup.
+**ThingPlusBLEOSC** is an Arduino-compatible library that enables [SparkFun Thing Plus (ESP32)](https://www.sparkfun.com/products/15663) devices to send and receive [Open Sound Control (OSC)](https://opensoundcontrol.stanford.edu/)-styled messages via Bluetooth Low Energy (BLE). It is designed for creative coding, interactive installations, and sensor-actuator projects that benefit from wireless communication with minimal setup.
 
 ---
 
